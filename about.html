@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us - UST The Graduate School</title>
+    <style>
+        :root {
+            --ust-gold: #FFD700;
+            --ust-black: #000000;
+            --ust-white: #FFFFFF;
+            --ust-blue: #0047AB;
+            --text-dark: #333;
+            --background-light: #f9f9f9;
+        }
+
+        body {
+            font-family: 'Georgia', serif;
+            margin: 0;
+            padding: 0;
+            color: var(--text-dark);
+            line-height: 1.8;
+            background-color: var(--background-light);
+            scroll-behavior: smooth;
+        }
+
+        /* --- Header --- */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 20px 50px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 150;
+            box-sizing: border-box;
+            transition: all 0.4s ease;
+        }
+
+        .header.scrolled {
+            background-color: rgba(0, 0, 0, 0.95);
+            padding: 10px 50px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            border-bottom: 2px solid var(--ust-gold);
+        }
+
+        .logo a { color: var(--ust-white); text-decoration: none; display: flex; align-items: center; }
+        .header-logo { height: 40px; margin-right: 10px; transition: height 0.4s ease; }
+        .header.scrolled .header-logo { height: 35px; }
+        .logo-text-wrapper { display: flex; flex-direction: column; line-height: 1.1; }
+        .logo-main { font-family: 'Times New Roman', Times, serif; font-weight: bold; font-size: 20px; color: var(--ust-gold); text-transform: uppercase; text-shadow: 0 0 5px rgba(0,0,0,0.7); }
+        .logo-sub { font-family: Arial, sans-serif; font-weight: bold; font-size: 13px; color: var(--ust-blue); text-transform: uppercase; letter-spacing: 0.5px; text-shadow: 0 0 5px rgba(0,0,0,0.7); }
+        .header.scrolled .logo-sub { color: var(--ust-white); }
+
+        .menu-toggle {
+            background: none; border: 2px solid var(--ust-white); color: var(--ust-white); padding: 10px 15px; cursor: pointer; font-size: 16px; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; transition: 0.3s; text-shadow: 0 0 3px rgba(0,0,0,0.5);
+        }
+        .menu-toggle:hover { background-color: var(--ust-white); color: var(--ust-black); text-shadow: none; }
+
+        /* --- Overlay Menu --- */
+        .overlay { height: 0; width: 100%; position: fixed; z-index: 200; top: 0; left: 0; background-color: rgba(255, 255, 255, 0.98); overflow-y: hidden; overflow-x: hidden; transition: height 0.4s ease-in-out; }
+        .overlay-top { display: flex; justify-content: space-between; align-items: center; padding: 30px 50px 10px 50px; }
+        .overlay-header { display: flex; align-items: center; gap: 15px; }
+        .overlay-header .header-logo { height: 70px; width: auto; }
+        .overlay-title { display: flex; flex-direction: column; line-height: 1.1; }
+        .overlay-title .the-text { font-family: 'Times New Roman', serif; font-size: 20px; color: var(--ust-blue); text-transform: uppercase; }
+        .overlay-title .gs-text { font-family: 'Times New Roman', serif; font-size: 30px; font-weight: bold; color: var(--ust-blue); text-transform: uppercase; }
+        .closebtn { font-size: 60px; text-decoration: none; color: var(--ust-black); cursor: pointer; line-height: 1; margin-left: 20px; }
+        .overlay-content { position: relative; top: 2%; width: 100%; text-align: left; padding: 0 50px 50px 50px; min-height: 90vh; }
+        .overlay a { padding: 12px 8px; text-decoration: none; font-size: 35px; color: var(--text-dark); display: block; transition: 0.3s; font-family: 'Times New Roman', serif; border-bottom: 1px solid #eee; }
+        .overlay a:hover { color: var(--ust-gold); padding-left: 30px; }
+
+        /* --- Parallax Hero --- */
+        .hero {
+            background-image: url('resources/image/Bg.JPG');
+            background-attachment: fixed; background-size: cover; background-position: center; height: 450px; display: flex; justify-content: center; text-align: center; color: white; position: relative; align-items: center; padding-top: 80px;
+        }
+        .hero::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.6); z-index: 1; }
+        .hero-text-content { position: relative; z-index: 2; max-width: 800px; padding: 0 20px; }
+        .hero h1 { font-size: 3.5em; margin-bottom: 10px; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7); }
+        .hero p { font-size: 1.2em; font-family: Arial, sans-serif; letter-spacing: 2px; text-transform: uppercase; }
+
+        /* --- Section Header Bars --- */
+        .section-header-bar {
+            background-color: var(--ust-black);
+            color: var(--ust-white);
+            text-align: center;
+            padding: 12px 0;
+            border-top: 2px solid var(--ust-gold);
+            border-bottom: 2px solid var(--ust-gold);
+            margin: 40px 0 20px 0;
+            font-family: 'Georgia', serif;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            font-size: 1.5em;
+        }
+
+        /* --- ACCORDION STYLES (Vision, Mission, Goals) --- */
+        .accordion-wrapper {
+            width: 95%;
+            max-width: 1000px;
+            margin: 0 auto 50px auto;
+            border: 1px solid #ddd;
+            background-color: var(--ust-white);
+            position: relative;
+            z-index: 10;
+        }
+        .accordion {
+            background-color: #f9f9f9;
+            color: #333;
+            cursor: pointer;
+            padding: 18px 20px;
+            width: 100%;
+            border: none;
+            border-bottom: 1px solid #ddd;
+            text-align: left;
+            outline: none;
+            font-size: 1.1em;
+            font-weight: bold;
+            font-family: Arial, sans-serif;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+        .accordion:last-of-type {
+            border-bottom: none;
+        }
+        .accordion.active {
+            background-color: #555;
+            color: white;
+            border-bottom: none;
+        }
+        .accordion:hover:not(.active) {
+            background-color: #eaeaea;
+        }
+        .accordion::after {
+            content: '\276F'; /* Right arrow */
+            font-size: 14px;
+            float: right;
+            transition: transform 0.3s;
+        }
+        .accordion.active::after {
+            transform: rotate(90deg); /* Points down when active */
+        }
+        .panel {
+            padding: 0 20px;
+            background-color: white;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+            border-bottom: 1px solid #ddd;
+        }
+        .panel:last-of-type {
+            border-bottom: none;
+        }
+        .panel p {
+            margin: 20px 0;
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #444;
+        }
+        .panel ul {
+            margin: 0 0 20px 0;
+            padding-left: 30px;
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #444;
+        }
+        .panel li {
+            margin-bottom: 10px;
+            text-align: justify;
+        }
+
+        /* --- HISTORY 2-COLUMN LAYOUT --- */
+        .history-container {
+            width: 95%; 
+            max-width: 1400px; 
+            margin: 0 auto 50px auto; 
+            display: grid;
+            grid-template-columns: 2fr 1fr; /* Text takes 2/3, sliders take 1/3 */
+            gap: 60px;
+            position: relative;
+            z-index: 10;
+        }
+
+        /* Left Side History Text */
+        .history-text {
+            font-family: Arial, sans-serif;
+            font-size: 0.95em;
+            color: #555;
+            text-align: justify;
+            line-height: 1.7;
+        }
+        .history-text p {
+            margin-bottom: 20px;
+        }
+
+        /* Right Side Carousel */
+        .carousel-section {
+            display: flex;
+            flex-direction: column;
+            gap: 60px;
+            align-items: center;
+        }
+
+        .carousel-title {
+            font-family: 'Georgia', serif;
+            font-size: 1.6em;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--ust-black);
+            margin-bottom: 25px;
+            text-align: center;
+        }
+
+        /* Slider Logic */
+        .slider-container {
+            position: relative;
+            width: 100%;
+            max-width: 300px;
+            text-align: center;
+        }
+
+        .slide {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            animation: fade 0.6s ease-in-out;
+        }
+
+        .slide.active {
+            display: flex; 
+        }
+
+        @keyframes fade {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .slide img {
+            width: 160px;
+            height: 160px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+        }
+
+        .slide h4 {
+            font-family: 'Times New Roman', serif;
+            font-size: 1.1em;
+            text-transform: uppercase;
+            color: var(--text-dark);
+            margin: 0 0 10px 0;
+            line-height: 1.4;
+        }
+
+        .slide .years {
+            font-family: Arial, sans-serif;
+            font-size: 0.75em;
+            font-weight: bold;
+            color: #222;
+        }
+
+        /* Arrows */
+        .prev, .next {
+            cursor: pointer;
+            position: absolute;
+            top: 30%;
+            width: auto;
+            padding: 10px;
+            color: #ccc;
+            font-weight: bold;
+            font-size: 40px;
+            transition: 0.3s ease;
+            user-select: none;
+        }
+
+        .prev:hover, .next:hover { color: var(--ust-gold); }
+        .prev { left: -40px; }
+        .next { right: -40px; }
+
+        /* Pagination Dots */
+        .dot-container { text-align: center; margin-top: 15px; }
+        .dot { cursor: pointer; height: 6px; width: 6px; margin: 0 4px; background-color: #bbb; border-radius: 50%; display: inline-block; transition: background-color 0.3s ease; }
+        .dot.active, .dot:hover { background-color: #333; }
+
+        /* --- Scroll Animation Classes --- */
+        .reveal { opacity: 0; transform: translateY(30px); transition: all 0.8s ease-out; }
+        .reveal.active { opacity: 1; transform: translateY(0); }
+
+        /* --- Footer --- */
+        .footer { background-color: var(--ust-black); color: white; padding: 40px 50px; text-align: center; font-size: 0.9em; line-height: 1.8; margin-top: 60px; }
+
+        /* Mobile Layout */
+        @media (max-width: 900px) { 
+            .history-container { grid-template-columns: 1fr; gap: 40px; } 
+            .carousel-section { flex-direction: row; justify-content: space-around; flex-wrap: wrap; }
+            .prev { left: -10px; }
+            .next { right: -10px; }
+        }
+        @media (max-width: 600px) {
+            .carousel-section { flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="overlay-menu" class="overlay">
+        <div class="overlay-top">
+            <div class="overlay-header">
+                <img src="resources/image/UST-Graduate_School.png" alt="Graduate School Crest" class="header-logo"/>
+                <div class="overlay-title">
+                    <span class="the-text">The</span>
+                    <span class="gs-text">Graduate School</span>
+                </div>
+            </div>
+            <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+        </div>
+
+        <div class="overlay-content">
+            <a href="index.html">Home</a>
+            <a href="about.html" style="color: var(--ust-gold); padding-left: 30px;">About Us</a>
+            <a href="policies.html">Admission & Academic Policies</a>
+            <a href="courses.html">Programs Offered</a>
+            <a href="#">Schedule of Fees</a>
+            <a href="calendar.html">School Calendar</a>
+            <a href="#">Research and Publications</a>
+            <a href="forms.html">Forms</a>
+            <a href="faculty.html">Faculty</a>
+        </div>
+    </div>
+
+    <header class="header" id="main-header">
+        <div class="logo">
+            <a href="index.html">
+                <img src="resources/image/UST-Graduate_School.png" alt="Graduate School Crest" class="header-logo"/>
+                <div class="logo-text-wrapper">
+                    <span class="logo-main">University of Santo Tomas</span>
+                    <span class="logo-sub">The Graduate School</span>
+                </div>
+            </a>
+        </div>
+        <button class="menu-toggle" onclick="openNav()">Menu</button>
+    </header>
+
+    <main>
+        <div class="hero">
+            <div class="hero-text-content">
+                <h1>About Us</h1>
+                <p>A Legacy of Excellence in Graduate Education</p>
+            </div>
+        </div>
+
+        <div class="section-header-bar reveal">
+            Vision, Mission & Goals
+        </div>
+
+        <div class="accordion-wrapper reveal">
+            
+            <button class="accordion">Vision</button>
+            <div class="panel">
+                <p>We envision a Graduate School that stands for excellence and innovation and that is globally recognized for its distinct degree programs and quality research outputs.</p>
+            </div>
+
+            <button class="accordion">Mission</button>
+            <div class="panel">
+                <p>We are a Catholic institution of learning dedicated to advancing the frontiers of knowledge in the theoretical and applied fields through quality graduate education that is comprehensive and responsive to the needs of society.</p>
+                <p>We are committed to the formation of scholars and high-quality professionals who are ethical, competent, compassionate, and committed to the service of their respective professions, the church, the nation, and the global community.</p>
+            </div>
+
+            <button class="accordion">Goals</button>
+            <div class="panel">
+                <p>The Graduate School commits itself to develop:</p>
+                <ul>
+                    <li>competent professionals who, inspired by the ideals of St. Antoninus of Florence, promote excellence in the production, advancement, and transmission of specialized knowledge and skills in the sciences, the arts, and community service;</li>
+                    <li>scholarly researchers and creative thinkers who, kindled by St. Thomas Aquinas’ ardour for truth, aspire to become fonts of intellectual creativity and, in their quest for quality research, are proficient and critical in assessing and communicating information in various fields that impact the professions, the church, the nation, and the global community;</li>
+                    <li>professional Christian leaders who, touched by St. Dominic de Guzman’s apostolic fire and warmed by Mary’s motherly care, articulate ethics and truth, high level of moral maturity in resolving issues and promoting social justice and compassion for the poor, and care for the environment;</li>
+                    <li>globally engaged citizens who, with ardent advocacy for life, promote a deeper understanding of tolerance and justice as well as linguistic, religious, and cultural diversities as a result of precise evaluation of modern problems and inquiries;</li>
+                    <li>committed scholars who, nurtured by the dogmas of Christian faith and values, are dedicated to the pursuit of truth through the promotion of an intellectual culture that values academic rigor and freedom of scientific investigations; and</li>
+                    <li>lifelong learners who, empowered by St. Antoninus of Florence’s zeal for learning, are committed to the advancement of a higher culture through a continuous search for intellectual inquiries and new knowledge as well as faithfulness to Catholic intellectual traditions.</li>
+                </ul>
+            </div>
+
+        </div>
+
+
+        <div class="section-header-bar reveal">
+            History
+        </div>
+
+        <div class="history-container">
+            
+            <div class="history-text reveal">
+                <p>The University of Santo Tomas (UST) is the oldest institution of higher education not only in the Philippines but also in Asia. It is acknowledged as a university at par with the leading higher education institutions here and beyond the Philippine shoreline.</p>
+
+                <p>Her rich history began when in 1619, Pope Paul V granted faculties to confer degrees to all Dominican colleges in the New World including Colegio de Santo Tomas founded on April 28, 1611 by the Superiors of the Spanish Dominican Province of the Holy Rosary. In 1629, Pope Urban VIII issued a Papal Document renewing the authority of Colegio de Santo Tomas to confer various degrees. On November 20, 1645, Pope Innocent X raised the ‘Colegio’ to the status of a ‘University’ with civil and ecclesiastical faculties. It was placed under the continued administration of the Order of Preachers, and its authority to confer degrees became enduring. In 1785, King Charles III of Spain granted the University the prestigious title of ‘Royal’. In 1902, Pope Leo XIII awarded the title ‘Pontifical’ to UST while in 1947, Pope Pius awarded her the title The Catholic University of the Philippines. In the 20th century, the University operated under the laws of the state that exercised jurisdiction over the civil faculties. Permission and approval were granted and renewed by the Bureau of Education during the Commonwealth, later by the Department of Education of the Republic of the Philippines, the Ministry of Education, Culture and Sports (MECS), and again by the Department of Education, Culture and Sports (DECS); and now, since 1994, by the Commission on Higher Education (CHED).</p>
+
+                <p>Thus, UST is distinguished as an educational institution with the title Royal, Pontifical and The Catholic University of the Philippines – a title it rightfully deserves because of its unwavering commitment to the goals of Catholic education and national and global advancement, of the expertise of the faculty, of the sterling intellectual, moral and skill-oriented qualities of its graduates and the contributions of the accomplished men and women who have walked its portals and helped shape the course of Philippine history. Without any grain of doubt, the Graduate School of the University has also played a prominent and pivotal role in contributing not only to the prestige and accolade the University has earned but also to her national, regional, and global recognition.</p>
+
+                <p>When UST was established, the masters and doctoral programs were offered in the different faculties. Thus, the programs Licentiate in Civil Law and Doctor of Civil Law were offered at the Faculty of Civil Law; Licentiate in Philosophy and Letters and Doctor of Philosophy and Letters were housed at the Faculty of Philosophy and Letters. Further, Master of Science in Pharmacy and Doctor of Pharmacy were offered at the Faculty of Pharmacy, Master of Science in Civil Engineering at the Faculty of Engineering, Master of Arts in Education and Doctor of Philosophy in Education at the College of Education, Master of Science in Mathematics, Master of Science in Chemistry, and Doctor of Philosophy at the Graduate School of Science at the College of Science, and Master of Science in Commerce major in Accounting or in Banking at the School of Commerce and Business Administration. However, in her relentless pursuit of quality graduate education that is locally and internationally known and comparable, in June 1938, UST established the Graduate School to shelter all the graduate programs offered in the University.</p>
+
+                <p>The earliest existing records in the Archives of the University marked the first 12 graduates from 1629 to 1645. These graduates were conferred the Doctoral degree in Theology as well as Masters and Licentiate degrees in the Arts. From 1645 to 1911, there was a total of 1,176 graduates in the Doctoral, Masters, and Licentiate levels in Theology, Philosophy, Arts, Civil Law, Canon Law, Latin, Pharmacy, and Medicine. Investitures held since 1663 were recorded in the official graduation book of the University entitled <em>Libro de Asiento de Grados de la Universidad de Santo Tomas</em>.</p>
+
+                <p>Other than the number of graduates she has produced, it is also interesting to reckon some of the most notable highlights between the academic years 1896 and 1917. The University conferred among others such degrees as Doctor in Natural Science in 1896 (1), Licentiate in Philosophy and Letters in 1897 (2), Doctor of Physical Science in 1906 (1), Licentiate in Dentistry in 1908 (1), Doctor of Philosophy and Letters in 1909 (1), Licentiate in Civil Engineering in 1912 (3), Master of Science in 1961 (1), and Master of Science in Electrical and Mechanical Engineering in 1917 (1).</p>
+
+                <p>In 1926, Master of Arts and Doctor of Philosophy major in Economics, as well as Master of Arts and Doctor of Philosophy in Education, were offered. Records show that three out of the first four graduates of Master of Arts in Education in 1930 were females and the first batch of graduates of Doctor of Philosophy in Education in 1934 was all females as well. Eventually, they all became faculty members and, possibly, the first female teachers in the University. The first woman graduate was granted a Licentiate in Pharmacy in 1924 while the first women graduates of Doctor of Pharmacy graduated in 1925. Although Master of Science in Chemistry was first offered in 1928, it was only in 1936 when the University first conferred the degree Master of Science in Chemistry. In the same year, the Master of Science in Physics was also conferred. In 1928, the University offered five more courses: M.A. and Ph.D. major in English; M.A. and Ph.D. major in Political Science; M.S. and Ph.D. in Biology; Ph.D. in Chemistry; and Ph.D. in Mathematics. In 1934, M.S. and Ph.D. in Commerce were first offered. The first candidates for the degree of Ph.D. in Chemistry and Mathematics graduated in 1935.</p>
+                
+                <p>Within the period of 11 years, from 1926 to 1937, UST granted 10 honorary degrees to nine recipients. One of them was Rev. Eugene I. McGuinnes who was awarded both degrees of Doctor of Canon Law and Doctor of Sacred Theology in 1927. The other two most prominent awardees were Honorable Sergio Osmena, Sr. in 1929 and His Excellency Commonwealth President, Manuel L. Quezon in 1936, both of whom were given Doctor of Laws, honoris causa.</p>
+                
+                <p>In 1938, the University formally established the Graduate School to coordinate all graduate and post-graduate studies in the faculties except that of Medicine and Surgery and Ecclesiastical Faculties. The first Dean was Father Rector himself, Very Rev. Fr. Silvestre Sancho, O.P., S.Th.D. From 1938 to 1946 the Graduate School granted degrees in the following disciplines: Master of Science in Chemical Engineering; Master of Laws and Doctor of Civil Law; M.S. and Ph.D. major in Chemistry; M.S. and Ph.D. in Commerce; M.S. in Pharmacy and Doctor of Pharmacy; M.A. and Ph.D. in Education; M.A. and Ph.D. in English; M.A. and Ph.D. major in Philosophy; M.A. and Ph.D. major in Political Science; Doctor of Letters; Master of Science in Civil Engineering; Master of Science in Mathematics; and Master of Science in Physics. All the Graduate courses offered before December 8, 1941 had their respective certificates of government recognition. However, after World War II, in 1945, the UST Graduate School applied for and received new certificates of recognition for the said courses except for Civil Engineering and Physics.</p>
+
+                <p>From 1949 to 1950, additional programs were offered by the Graduate School. These include Master of Arts major in Philosophy, in Education, in Filipino National Language, in English, in Political Science, and in Social Science. Offered, too, was Doctor of Philosophy major in Education. Other programs that flourished include Master of Science in Chemistry, Master of Science in Commerce major in Accounting and Banking and Doctor of Philosophy major in Commerce.</p>
+                
+                <p>In 1951, permission was renewed by the Director of Private Schools of the Department of Education for the UST Graduate School to continue offering different majors covered by the certificates of government recognition for the different degrees. Thus, apart from the already existing courses, the Graduate School began offering other courses: M.S. and Ph.D. in Biology; M.S. and Ph.D. in Zoology; M.S. and Ph.D. in Economics; M.A. and Ph.D. in Guidance and Counseling; M.A. and Ph.D. in History; M.S. in Botany; M.S. in Elementary Education; M.A. in Library Science; M.A. in Linguistics; M.A. in Filipino; M.A. in Public Administration; and M.A. in Social Sciences. In the same year, the following programs were reissued government recognition by the Department of Education: Master of Laws, Doctor of Civil Laws, Master of Science in Pharmacy, Doctor of Philosophy, Master of Science, Master of Arts, Master of Arts in Education, Doctor of Philosophy in Education and Master of Science in Commerce.</p>
+
+                <p>Because of the recognition of Master of Science, Master of Arts, and Doctor of Philosophy programs, several program offerings that did not require recognition were added. In 1951, the Doctor of Philosophy major in Chemistry, Master of Science major in Botany, Master of Science major in Zoology, and MSC major in Economics were opened. In 1953, the recognition for Doctor of Pharmacy was reissued.</p>
+
+                <p>From 1955 to 1956, the UST Graduate School was granted certificates of recognition for Master’s Programs in Music and in Spanish. In the same year, the programs offered further expanded through the opening of Doctor of Philosophy major in Philosophy and Doctor of Philosophy major in Political Science, in Social Science (Anthropology or History), and in Economics, Master of Arts major in Library Science and major in Social Welfare, and Master of Music major in Applied Music with specialization in piano, voice, violin or cello, composition, or musical science theory.</p>
+                
+                <p>In the succeeding years, more programs were offered: Master of Science in Manufacturing Pharmacy in 1959; Master of Arts in Nursing in 1960; Master of Arts in Pilipino Language in 1960; Master of Science in Commerce major in Management in 1960; Master of Arts major in Guidance and Counseling and major in Applied Psychology in 1960; Master of Science in Commerce major in Marketing, major in Administration, and major in Production in 1961; Master of Science major in Biological Science in 1962; Master of Arts major in Elementary Education in 1963; Master of Arts in Higher Religious Studies in 1965; and Doctor of Letters in 1966.</p>
+
+                <p>Unsurprisingly, the Department of Education granted two successive recognitions to the Graduate School: No. 310 series of 1966 and No. 240 series of 1967 for the postgraduate course leading to the degree Doctor of Letters.</p>
+
+                <p>On May 18, 1972, permission to continue offering different programs covered by the certificates of recognition was again granted by the Director of Private Schools. Likewise, in 1974, the Department of Education, Culture and Sports granted permission for the Graduate School to offer Master of Science in Chemistry Education.</p>
+
+                <p>In 1975, the Graduate School applied for permission to offer three new programs: M.S. Architecture; M.S. Medical Technology major in Laboratory Management, and Master in Business Administration (MBA). Two years after, in 1977, the Department of Education and Culture granted two recognitions to two graduate degree programs: Master of Science in Chemistry Education and Master of Science in Business Administration.</p>
+
+                <p>In 1978, the Graduate School applied for and opened six new programs: M.A. and Ph.D. in Development Education; M.S. Biology Education; M.S. Mathematics Education; M.A. Special Education; M.S. Microbiology; M.A. Oriental Religions and Cultures. The following years saw the approval of offering new programs: M.S. Advertising in 1979; M.S. and Ph.D. in Personal and Human Resource Management in 1981; M.S. Applied Physics, major in Medical Technology in 1983; Master of Science in Architecture in 1984; Ph.D. in Public Administration in 1984; Master of Science in Applied Physics major in Medical Physics in 1985; Master of Science in Personnel and Human Resource and M.S. in Management Engineering in 1987.</p>
+
+                <p>The Graduate School continuously improved herself by strengthening the programs it offered in the preceding decade that passed. In 1997, in fact, the Commission on Higher Education (CHED) granted the consortium of Adamson University, De La Salle University, Mapua Institute of Technology, Technological University of the Philippines and the University of Santo Tomas to operate the Master of Engineering program. In the succeeding years, additional programs were offered: Master of Arts and Doctor of Philosophy in Theology, Master of Science in Physical Therapy, Master of Arts in Communication, Master of Arts in Creative Writing, Master of Arts and Doctor of Philosophy in Education major in Educational Management, M.A. and Ph.D. major in Development Studies, M.S. major in Hospital Administration, M.S. major in Biology Education, M.S. major in Secondary Mathematics Education, Master of Arts in Theology major in Social Pastoral Communications, Master in Cultural Heritage Studies, and Master of Engineering.</p>
+
+                <p>In 2002, several non-thesis masters programs in the different disciplines were also offered. Examples are Master in Public Administration, Master in Business Administration, Master of English, and Master of History. In 2004, additional non-thesis masters programs were opened: Master in Biology, Master in Chemistry, Master in Economics, and Master in Psychology.</p>
+
+                <p>To date, the UST Graduate School has course offerings in 60 Master’s Degree Programs, and 20 Doctoral Degree Programs.</p>
+
+                <p>The Graduate School also maintains three offices composed of the following: the Office for Graduate Research (OGR) committed to further hone the research capabilities of graduate researchers; the Center of Continuing Professional Education and Development (CCPED) that partners with the industry’s foremost authorities to develop quality training programs designed for forward thinking professionals leading to their organizational transformation; and the Center for Conservation of Cultural Property and Environment in the Tropics (CCCPET) which takes an active role in the development, preservation, protection, and promotion of the Filipino cultural heritage in partnership with institutions in the local and national levels.</p>
+
+                <p>More importantly, the Graduate School now enjoys Level III accreditation status for its Master’s programs granted by the Philippine Association of Colleges and Universities Commission on Accreditation (PACUCOA), maintains two Centers of Development (M.S./Ph.D. Psychology and M.A. Literature) and three Centers of Excellence (M.A./Ph.D. Philosophy, Master in Music and M.S./Ph.D. Chemistry) and has been recognized by EDUNIVERSAL as one of best Master’s Programs worldwide.</p>
+            </div>
+
+            <div class="carousel-section reveal">
+                
+                <div>
+                    <h2 class="carousel-title">DEANS</h2>
+                    
+                    <div class="slider-container" id="deans-slider">
+                        <div class="slide active">
+                            <img src="resources/image/Admin/Dean.jpg" alt="Prof. Vasco">
+                            <h4>PROF. MICHAEL ANTHONY C.<br>VASCO, PHD</h4>
+                            <span class="years">2019-PRESENT</span>
+                        </div>
+                        <div class="slide">
+                            <img src="resources/image/Admin/Madrunio.jpg" alt="Prof. Madrunio">
+                            <h4>PROF. MARILU R.<br>MADRUNIO, PHD</h4>
+                            <span class="years">2013-2019</span>
+                        </div>
+                        <div class="slide">
+                            <img src="resources/image/Admin/JilianSison.jpg" alt="Prof. Sison">
+                            <h4>PROF. LILIAN J.<br>SISON, PHD</h4>
+                            <span class="years">2000-2013</span>
+                        </div>
+
+                        <a class="prev" onclick="changeSlide('deans-slider', -1)">&#10094;</a>
+                        <a class="next" onclick="changeSlide('deans-slider', 1)">&#10095;</a>
+                        
+                        <div class="dot-container">
+                            <span class="dot active" onclick="currentSlide('deans-slider', 1)"></span>
+                            <span class="dot" onclick="currentSlide('deans-slider', 2)"></span>
+                            <span class="dot" onclick="currentSlide('deans-slider', 3)"></span> 
+                        </div>
+                    </div>
+                </div>
+
+                <div>
+                    <h2 class="carousel-title">REGENTS</h2>
+                    
+                    <div class="slider-container" id="regents-slider">
+                        <div class="slide active">
+                            <img src="resources/image/Admin/Regent.jpg" alt="Rev. Fr. Aligan">
+                            <h4>REV. FR. RODEL E. ALIGAN,<br>O.P., STHD</h4>
+                            <span class="years">2020-PRESENT</span>
+                        </div>
+                        <div class="slide">
+                            <img src="resources/image/Admin/JoseAUREADA.jpg" alt="Rev. Fr. Aureada">
+                            <h4>REV. FR. JOSE ANTONIO E.<br>AUREADA, O.P., STHD</h4>
+                            <span class="years">2000-2020</span>
+                        </div>
+
+                        <a class="prev" onclick="changeSlide('regents-slider', -1)">&#10094;</a>
+                        <a class="next" onclick="changeSlide('regents-slider', 1)">&#10095;</a>
+                        
+                        <div class="dot-container">
+                            <span class="dot active" onclick="currentSlide('regents-slider', 1)"></span>
+                            <span class="dot" onclick="currentSlide('regents-slider', 2)"></span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </main>
+
+    <footer class="footer">
+        <p><strong>UST GRADUATE SCHOOL</strong> <br> Thomas Aquinas Research Complex, España Blvd, Manila</p>
+        <p>(+632) 731 5396 | graduateschool@ust.edu.ph</p>
+        <p style="margin-top: 20px; font-size: 0.8em; color: #888;">&copy; <span id="year"></span> UST GRADUATE SCHOOL. ALL RIGHTS RESERVED.</p>
+    </footer>
+
+    <script>
+        /* --- Menu Functions --- */
+        function openNav() {
+            document.getElementById("overlay-menu").style.height = "100%";
+            document.body.style.overflow = "hidden";
+        }
+
+        function closeNav() {
+            document.getElementById("overlay-menu").style.height = "0%";
+            document.body.style.overflow = "auto";
+        }
+
+        document.addEventListener('keydown', function(event) {
+            if (event.key === "Escape") { closeNav(); }
+        });
+
+        /* --- Sticky Header Logic --- */
+        const header = document.getElementById('main-header');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) { header.classList.add('scrolled'); } 
+            else { header.classList.remove('scrolled'); }
+        });
+
+        document.getElementById("year").textContent = new Date().getFullYear();
+
+        /* --- Scroll Reveal Logic --- */
+        const observerOptions = { threshold: 0.15 };
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach((entry, index) => {
+                if (entry.isIntersecting) {
+                    setTimeout(() => { entry.target.classList.add('active'); }, index * 100); 
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.reveal').forEach((el) => {
+            observer.observe(el);
+        });
+
+        /* --- Accordion Logic --- */
+        var acc = document.getElementsByClassName("accordion");
+        for (var i = 0; i < acc.length; i++) {
+            acc[i].addEventListener("click", function() {
+                this.classList.toggle("active");
+                var panel = this.nextElementSibling;
+                if (panel.style.maxHeight) {
+                    panel.style.maxHeight = null;
+                } else {
+                    panel.style.maxHeight = panel.scrollHeight + "px";
+                } 
+            });
+        }
+        if(acc.length > 0) {
+            acc[0].click();
+        }
+
+        /* --- NEW AUTOMATIC SLIDER LOGIC --- */
+        let slideIndices = {
+            'deans-slider': 1,
+            'regents-slider': 1
+        };
+
+        let slideIntervals = {}; 
+
+        function startAutoSlide() {
+            slideIntervals['deans-slider'] = setInterval(function() { autoAdvance('deans-slider'); }, 4000); 
+            slideIntervals['regents-slider'] = setInterval(function() { autoAdvance('regents-slider'); }, 4000);
+        }
+
+        function autoAdvance(sliderId) {
+            showSlides(sliderId, slideIndices[sliderId] += 1);
+        }
+
+        function changeSlide(sliderId, n) {
+            showSlides(sliderId, slideIndices[sliderId] += n);
+            resetInterval(sliderId); 
+        }
+
+        function currentSlide(sliderId, n) {
+            showSlides(sliderId, slideIndices[sliderId] = n);
+            resetInterval(sliderId); 
+        }
+
+        function resetInterval(sliderId) {
+            clearInterval(slideIntervals[sliderId]);
+            slideIntervals[sliderId] = setInterval(function() { autoAdvance(sliderId); }, 4000);
+        }
+
+        function showSlides(sliderId, n) {
+            let i;
+            let slider = document.getElementById(sliderId);
+            let slides = slider.getElementsByClassName("slide");
+            let dots = slider.getElementsByClassName("dot");
+            
+            if (n > slides.length) { slideIndices[sliderId] = 1 }
+            if (n < 1) { slideIndices[sliderId] = slides.length }
+            
+            for (i = 0; i < slides.length; i++) {
+                slides[i].style.display = "none";
+                slides[i].classList.remove("active");
+            }
+            for (i = 0; i < dots.length; i++) {
+                dots[i].className = dots[i].className.replace(" active", "");
+            }
+            
+            slides[slideIndices[sliderId] - 1].style.display = "flex";
+            slides[slideIndices[sliderId] - 1].classList.add("active");
+            dots[slideIndices[sliderId] - 1].className += " active";
+        }
+
+        startAutoSlide();
+    </script>
+</body>
+</html>

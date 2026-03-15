@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Policies - UST The Graduate School</title>
+    <style>
+        :root {
+            --ust-gold: #FFD700;
+            --ust-black: #000000;
+            --ust-white: #FFFFFF;
+            --ust-blue: #0047AB;
+            --text-dark: #333;
+            --background-light: #f9f9f9;
+        }
+
+        body {
+            font-family: 'Georgia', serif;
+            margin: 0;
+            padding: 0;
+            color: var(--text-dark);
+            line-height: 1.8;
+            background-color: var(--background-light);
+            scroll-behavior: smooth;
+        }
+
+        /* --- Header --- */
+        .header {
+            position: fixed;
+            top: 0; left: 0; width: 100%;
+            padding: 20px 50px;
+            display: flex; justify-content: space-between; align-items: center;
+            z-index: 150; box-sizing: border-box;
+            transition: all 0.4s ease;
+        }
+        .header.scrolled {
+            background-color: rgba(0, 0, 0, 0.95);
+            padding: 10px 50px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            border-bottom: 2px solid var(--ust-gold);
+        }
+        .logo a { color: var(--ust-white); text-decoration: none; display: flex; align-items: center; }
+        .header-logo { height: 40px; margin-right: 10px; transition: height 0.4s ease; }
+        .header.scrolled .header-logo { height: 35px; }
+        .logo-text-wrapper { display: flex; flex-direction: column; line-height: 1.1; }
+        .logo-main { font-family: 'Times New Roman', Times, serif; font-weight: bold; font-size: 20px; color: var(--ust-gold); text-transform: uppercase; text-shadow: 0 0 5px rgba(0,0,0,0.7); }
+        .logo-sub { font-family: Arial, sans-serif; font-weight: bold; font-size: 13px; color: var(--ust-blue); text-transform: uppercase; letter-spacing: 0.5px; text-shadow: 0 0 5px rgba(0,0,0,0.7); }
+        .header.scrolled .logo-sub { color: var(--ust-white); }
+        .menu-toggle { background: none; border: 2px solid var(--ust-white); color: var(--ust-white); padding: 10px 15px; cursor: pointer; font-size: 16px; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; transition: 0.3s; text-shadow: 0 0 3px rgba(0,0,0,0.5); }
+        .menu-toggle:hover { background-color: var(--ust-white); color: var(--ust-black); text-shadow: none; }
+
+        /* --- Overlay Menu --- */
+        .overlay { height: 0; width: 100%; position: fixed; z-index: 200; top: 0; left: 0; background-color: rgba(255, 255, 255, 0.98); overflow-y: hidden; overflow-x: hidden; transition: height 0.4s ease-in-out; }
+        .overlay-top { display: flex; justify-content: space-between; align-items: center; padding: 30px 50px 10px 50px; }
+        .overlay-header { display: flex; align-items: center; gap: 15px; }
+        .overlay-header .header-logo { height: 70px; width: auto; }
+        .overlay-title { display: flex; flex-direction: column; line-height: 1.1; }
+        .overlay-title .the-text { font-family: 'Times New Roman', serif; font-size: 20px; color: var(--ust-blue); text-transform: uppercase; }
+        .overlay-title .gs-text { font-family: 'Times New Roman', serif; font-size: 30px; font-weight: bold; color: var(--ust-blue); text-transform: uppercase; }
+        .closebtn { font-size: 60px; text-decoration: none; color: var(--ust-black); cursor: pointer; line-height: 1; margin-left: 20px; }
+        .overlay-content { position: relative; top: 2%; width: 100%; text-align: left; padding: 0 50px 50px 50px; min-height: 90vh; }
+        .overlay a { padding: 12px 8px; text-decoration: none; font-size: 35px; color: var(--text-dark); display: block; transition: 0.3s; font-family: 'Times New Roman', serif; border-bottom: 1px solid #eee; }
+        .overlay a:hover { color: var(--ust-gold); padding-left: 30px; }
+
+        /* --- Parallax Hero --- */
+        .hero { background-image: url('resources/image/Bg.JPG'); background-attachment: fixed; background-size: cover; background-position: center; height: 450px; display: flex; justify-content: center; text-align: center; color: white; position: relative; align-items: center; padding-top: 80px; }
+        .hero::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.6); z-index: 1; }
+        .hero-text-content { position: relative; z-index: 2; max-width: 800px; padding: 0 20px; }
+        .hero h1 { font-size: 3.5em; margin-bottom: 10px; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7); }
+        .hero p { font-size: 1.2em; font-family: Arial, sans-serif; letter-spacing: 2px; text-transform: uppercase; }
+
+        /* --- Content Layout --- */
+        .container { width: 90%; max-width: 1200px; margin: 0 auto 50px auto; position: relative; z-index: 10; }
+        
+        .section-header-bar {
+            background-color: var(--ust-black);
+            color: var(--ust-white);
+            text-align: center;
+            padding: 12px 0;
+            border-top: 2px solid var(--ust-gold);
+            border-bottom: 2px solid var(--ust-gold);
+            margin: 40px auto 30px auto;
+            font-family: 'Georgia', serif;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-size: 1.5em;
+        }
+
+        /* --- ACCORDION STYLES --- */
+        .accordion-wrapper {
+            background-color: var(--ust-white);
+            border: 1px solid #ddd;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            margin-bottom: 50px;
+        }
+
+        .accordion {
+            background-color: var(--background-light);
+            color: var(--ust-blue);
+            cursor: pointer;
+            padding: 20px;
+            width: 100%;
+            border: none;
+            border-bottom: 1px solid #ddd;
+            text-align: left;
+            outline: none;
+            font-size: 1.1em;
+            font-weight: bold;
+            font-family: Arial, sans-serif;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        .accordion:last-of-type { border-bottom: none; }
+        
+        .accordion.active {
+            background-color: var(--ust-blue);
+            color: var(--ust-white);
+            border-bottom: none;
+        }
+        
+        .accordion:hover:not(.active) { background-color: #e9e9e9; }
+        
+        .accordion::after {
+            content: '\002B'; /* Plus icon */
+            color: #777;
+            font-weight: bold;
+            float: right;
+            font-size: 1.5em;
+            margin-left: 5px;
+            transition: transform 0.3s;
+            line-height: 1;
+        }
+        .accordion.active::after {
+            content: "\2212"; /* Minus icon */
+            color: var(--ust-white);
+        }
+
+        .panel {
+            padding: 0 30px;
+            background-color: white;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+            border-bottom: 1px solid #ddd;
+        }
+        .panel:last-of-type { border-bottom: none; }
+        
+        .panel p {
+            margin: 20px 0;
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #444;
+            text-align: justify;
+        }
+        
+        .panel ul {
+            margin: 0 0 20px 0;
+            padding-left: 20px;
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #444;
+        }
+        
+        .panel li { margin-bottom: 10px; text-align: justify; }
+        .panel strong { color: var(--ust-black); }
+
+        /* Tables for specific policy sections */
+        .policy-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            font-family: Arial, sans-serif;
+        }
+        .policy-table th, .policy-table td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+            color: #444;
+        }
+        .policy-table th { background-color: var(--background-light); color: var(--ust-blue); }
+
+        /* --- Scroll Animation --- */
+        .reveal { opacity: 0; transform: translateY(30px); transition: all 0.8s ease-out; }
+        .reveal.active { opacity: 1; transform: translateY(0); }
+
+        .footer { background-color: var(--ust-black); color: white; padding: 40px 50px; text-align: center; font-size: 0.9em; line-height: 1.8; margin-top: 60px; }
+
+        @media (max-width: 768px) { .panel { padding: 0 15px; } .accordion { font-size: 1em; padding: 15px; } }
+    </style>
+</head>
+<body>
+
+    <div id="overlay-menu" class="overlay">
+        <div class="overlay-top">
+            <div class="overlay-header">
+                <img src="resources/image/UST-Graduate_School.png" alt="Graduate School Crest" class="header-logo"/>
+                <div class="overlay-title">
+                    <span class="the-text">The</span>
+                    <span class="gs-text">Graduate School</span>
+                </div>
+            </div>
+            <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+        </div>
+
+        <div class="overlay-content">
+            <a href="index.html">Home</a>
+            <a href="about.html">About Us</a>
+            <a href="policies.html" style="color: var(--ust-gold); padding-left: 30px;">Admission & Academic Policies</a>
+            <a href="courses.html">Programs Offered</a>            
+            <a href="#">Schedule of Fees</a>
+			<a href="calendar.html">School Calendar</a>
+            <a href="forms.html">Forms</a>
+            <a href="faculty.html">Faculty</a>
+        </div>
+    </div>
+
+    <header class="header" id="main-header">
+        <div class="logo">
+            <a href="index.html">
+                <img src="resources/image/UST-Graduate_School.png" alt="Graduate School Crest" class="header-logo"/>
+                <div class="logo-text-wrapper">
+                    <span class="logo-main">University of Santo Tomas</span>
+                    <span class="logo-sub">The Graduate School</span>
+                </div>
+            </a>
+        </div>
+        <button class="menu-toggle" onclick="openNav()">Menu</button>
+    </header>
+
+    <main>
+        <div class="hero">
+            <div class="hero-text-content">
+                <h1>Rules & Policies</h1>
+                <p>Guidelines for Admission and Academic Standing</p>
+            </div>
+        </div>
+
+        <div class="container">
+            
+            <div class="section-header-bar reveal">
+                Admission Policies
+            </div>
+
+            <div class="accordion-wrapper reveal">
+                
+                <button class="accordion">General Admission Requirements</button>
+                <div class="panel">
+                    <p>Accomplished admission requirements must be personally submitted to the UST Graduate School Office during the application period or at least a month before the enrollment starts. Documents, such as transcript of records (TOR) and application forms submitted via electronic mails are not allowed. Foreign applicants may send the admission requirements via international courier services.</p>
+                    <p>In general, an applicant with a general weighted average not lower than <strong>2.00 (85%) or B</strong> in the bachelor’s program may be admitted to an M.A./M.S. program. An applicant with a general weighted average not lower than <strong>1.35 (92%) or A-</strong> in the master’s program may be admitted to a Ph.D./Ed.D. program.</p>
+                    <p>Passing the bar/board examinations is a requirement for admission to Master of Laws, M.A. in Nursing, M.S. Pharmacy, and any other degree programs that require board examinations.</p>
+                </div>
+
+                <button class="accordion">Advanced Academic Writing Requirement</button>
+                <div class="panel">
+                    <p>Based on the results of the admission examination, a student may be required to take Advanced Academic Writing (3 units) as a prerequisite course to the program, subject to the following:</p>
+                    <ul>
+                        <li>A student unable to meet the cut-off for the qualifying examination is required to enroll in Advanced Academic Writing (3 units) not later than the second term of enrollment.</li>
+                        <li>A student required to enroll in Advanced Academic Writing may proceed to other courses in the program only after earning credit for it. However, other courses may be enrolled simultaneously with Advanced Academic Writing.</li>
+                        <li>The course Advanced Academic Writing cannot be waived as a requirement for the completion of the program.</li>
+                    </ul>
+                </div>
+
+                <button class="accordion">Foreign Students</button>
+                <div class="panel">
+                    <p>A foreign student, whether new or transferee, must pay the out-of-state fee, i.e., <strong>$2,750.00 for the master’s program</strong> and <strong>$3,500.00 for the doctoral program</strong> before formally enrolling. Payment of this fee may be in full or in an installment basis. A student who wishes to pay in installment may pay the out-of-state fee during the entire duration of the program.</p>
+                    <p>He/She, however, cannot graduate without a certificate from the Treasurer’s Office that he/she has settled the amount in full. The fee may be paid in dollars or in pesos. In the event that a foreign student discontinues his/her studies for whatever reason(s) during the first semester entry, the rule on dropping of courses is observed to determine adjustment of fees.</p>
+                    <p>Moreover, if a foreign student "suddenly disappeared" for whatever reason(s) and fails to settle his/her accounts, no official record of his/her academic performance shall be released.</p>
+                </div>
+
+                <button class="accordion">Alignment of Degrees & Foundation Courses</button>
+                <div class="panel">
+                    <p>There are some M.A./M.S. programs which require that the applicant take some undergraduate (foundation) courses as preparatory courses if his/her bachelor’s degree is not aligned with the M.A./M.S. degree s/he wishes to pursue. A student who wishes to pursue an M.A./M.S. degree not aligned with his/her bachelor’s degree should finish at least <strong>eighteen (18) units of foundation courses</strong> in the area of specialization (with grades not lower than 2.0).</p>
+                    <p>Those in the M.B.A. and M.S.C. programs whose undergraduate degree is non-business or non-economics must take additional <strong>nine (9) units of foundation courses</strong>, namely, Principles of Economics, Principles of Accounting, and Principles of Marketing. The M.B.A., M.S.H.R.M., and any other management-related graduate programs require at least <strong>two (2) years of work experience</strong> prior to admission.</p>
+                    <p>Graduates of professional degrees like M.D., D.M.D., D.V.M., O.D., J.D. or Ll.B., must first take and obtain a master’s degree prior to their application to the doctoral degree program.</p>
+                </div>
+
+                <button class="accordion">Second Degrees & Bridging Courses</button>
+                <div class="panel">
+                    <p><strong>Second Doctoral Degree:</strong> An applicant who already possesses a doctoral degree and wishes to pursue a second doctoral degree must fulfill the following requirements: If the desired second doctoral degree program is not related to the previous master’s and previous doctoral degrees, the applicant is required to take at least <strong>24 academic units in the master’s level</strong>.</p>
+                    <p><strong>Second Master's Degree:</strong> Prerequisite courses completed in the first master’s program, such as <em>Thomas Aquinas and Critical Thinking</em> and <em>Research Methodology</em> need not be taken again, but the applicant must take additional or parallel major/prerequisite courses in lieu of the prerequisite subjects completed before.</p>
+                    <p><strong>Non-Thesis to Doctoral Bridging:</strong> Graduates of non-thesis track programs from A.Y. 2010-2011 to A.Y. 2014-2015 who wish to pursue doctoral studies are required to enroll in six (6) units of bridging courses. They need to submit publishable research papers to reputable journals before formally enrolling in the doctoral program. Graduates before A.Y. 2010-2011 should finish a thesis-track M.S./M.A. program first.</p>
+                </div>
+            </div>
+
+            <div class="section-header-bar reveal">
+                Academic Policies
+            </div>
+
+            <div class="accordion-wrapper reveal">
+                
+                <button class="accordion">Petitioned & Special Classes</button>
+                <div class="panel">
+                    <p><strong>On Petitioned Classes:</strong> Classes not offered in the current semester may be petitioned for on condition that the number of students reaches <strong>ten (10) per class</strong>. It is encouraged that the number of students be maximized to twenty-five (25). A professor cannot handle petitioned courses more than twice if the same set of students is enrolled.</p>
+                    <p><strong>On Special Classes:</strong> A course whose number of students remains less than ten (10) may be requested to be opened as a "Special Class," especially if it is extremely needed by students about to take comprehensive exams. Students need to make extra payment if the total number of students does not reach the required number.</p>
+                </div>
+
+                <button class="accordion">Grades, Failures & Incompletes</button>
+                <div class="panel">
+                    <p><strong>Passing Grades:</strong> The passing grade for each course enrolled in an M.A./M.S. program is <strong>2.00</strong>, and <strong>1.75</strong> for each course enrolled in a doctoral program.</p>
+                    <p><strong>Failing Grades:</strong> Failure in two subjects (6 units) means automatic debarment of a student’s candidacy for a degree. Three WF (Withdrew without Permission) grades are a ground for debarment. A student who incurred a failing grade does not have to re-enroll the same failed subject, except if it is a prerequisite/core course. The failed course will still be reflected in his/her TOR.</p>
+                    <p><strong>Incomplete Grades:</strong> An "Incomplete" (INC) grade must be completed within a period of <strong>one (1) academic year</strong>. After a year, the student is required to repeat the same course or get a failing grade of 5.00.</p>
+                </div>
+
+                <button class="accordion">Probationary Status</button>
+                <div class="panel">
+                    <p>A student may be placed under probationary status if his/her general average and the required admission examination scores are not met or s/he is required to complete foundation/bridging courses.</p>
+                    <p>A student on a probationary status can change to a regular status after initially completing eighteen (18) units (6 courses) of graduate studies with a general average not lower than <strong>2.0</strong> for the M.A./M.S. program, and not lower than <strong>1.75</strong> for the doctoral degree program. Failure to meet these requirements means termination of candidacy.</p>
+                </div>
+
+                <button class="accordion">Dropping, Shifting & Cross-Enrollment</button>
+                <div class="panel">
+                    <p><strong>Dropping of Courses:</strong> Withdrawal of enrollment or dropping of courses may be effected on or before the scheduled preliminary examinations. Dropping of all courses may be entertained any time before the final examinations.</p>
+                    <p><strong>Shifting:</strong> Shifting is transferring from one program to another in the same level. Shifting from non-thesis track to thesis track or vice-versa must be done immediately after completing the student’s first term.</p>
+                    <p><strong>Cross-Enrollment:</strong> A student who wishes to cross-enroll in other leading universities must ensure the course is not offered in UST GS at the current semester. The maximum units for cross-enrollment is six (6) units. Prerequisite, core, and Philosophy courses must not be cross-enrolled.</p>
+                </div>
+
+                <button class="accordion">Absences & Tardiness</button>
+                <div class="panel">
+                    <p>A student who has incurred <strong>twelve (12) hours of absences</strong> is automatically dropped from the course and receives the equivalent grade of WF (Withdrew without Permission).</p>
+                    <p>For faculty tardiness, students are expected to wait:
+                        <ul>
+                            <li>For a three-hour class, students should not leave until after 45 minutes.</li>
+                            <li>For a two-hour class, students should wait for 25 minutes.</li>
+                        </ul>
+                    Students may be marked absent by a professor if they leave their classes earlier than the prescribed time without permission.
+                    </p>
+                </div>
+
+                <button class="accordion">Residency & Reactivation Courses</button>
+                <div class="panel">
+                    <p>The residency requirement for a master’s degree is <strong>five (5) years</strong>. For the Ph.D./Ed.D. degree, it is <strong>seven (7) years</strong>. Students who overstayed beyond the maximum residency are required to take reactivation courses equivalent to three (3) units per year up to a maximum of five (5) years.</p>
+                    <table class="policy-table">
+                        <tr>
+                            <th>Year beyond residency</th>
+                            <th>Reactivation units</th>
+                        </tr>
+                        <tr><td>1 year</td><td>3 units</td></tr>
+                        <tr><td>2 years</td><td>6 units</td></tr>
+                        <tr><td>3 years</td><td>9 units</td></tr>
+                        <tr><td>4 years</td><td>12 units</td></tr>
+                        <tr><td>5 years</td><td>15 units</td></tr>
+                    </table>
+                    <p>An M.A./M.S. student may be allowed a maximum of <strong>ten (10) years</strong> to complete a degree. A Ph.D./Ed.D. student may be allowed a maximum of <strong>twelve (12) years</strong>. Beyond these limits, the student will have to repeat the entire program.</p>
+                </div>
+
+                <button class="accordion">Academic Integrity & Plagiarism</button>
+                <div class="panel">
+                    <p>Plagiarism, which is the willful claim of the words and ideas of another without attribution, is a serious academic offense. The Graduate School subscribes to the guidelines of the Publication Manual of the American Psychological Association.</p>
+                    <p><strong>Substantial Plagiarism:</strong> Involving paraphrasing without adequate documentation. First offense results in a grade of zero for the assignment. Second offense results in cancellation of enrollment. If a thesis/dissertation is substantially plagiarized, the penalty is resubmission of another paper on a new topic.</p>
+                    <p><strong>Complete Plagiarism:</strong> Verbatim copying without documentation or submitting a purchased paper. This may result in <strong>expulsion</strong> from the Graduate School.</p>
+                    <p><em>Note: Those writing their theses/dissertations are required to subject their papers to the TURNITIN software at the Office for Graduate Research.</em></p>
+                </div>
+
+                <button class="accordion">Classroom Policies & Dress Code</button>
+                <div class="panel">
+                    <p><strong>Classroom Policies:</strong> A classroom activity always begins with an Opening Prayer and ends with a Closing Prayer. All electronic devices must be switched off or put on mute mode. For campus security reasons, all students should be out of campus by 10:00 p.m.</p>
+                    <p><strong>Dress Code:</strong> Students are required to adhere to the conventions of professional grooming. The prescribed attire is <strong>smart casual</strong>. Walking shorts, slippers, and miniskirts are prohibited.</p>
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <p><strong>UST GRADUATE SCHOOL</strong> <br> Thomas Aquinas Research Complex, España Blvd, Manila</p>
+        <p>(+632) 731 5396 | graduateschool@ust.edu.ph</p>
+        <p style="margin-top: 20px; font-size: 0.8em; color: #888;">&copy; <span id="year"></span> UST GRADUATE SCHOOL. ALL RIGHTS RESERVED.</p>
+    </footer>
+
+    <script>
+        /* --- Menu Functions --- */
+        function openNav() { document.getElementById("overlay-menu").style.height = "100%"; document.body.style.overflow = "hidden"; }
+        function closeNav() { document.getElementById("overlay-menu").style.height = "0%"; document.body.style.overflow = "auto"; }
+        document.addEventListener('keydown', function(event) { if (event.key === "Escape") { closeNav(); } });
+        
+        const header = document.getElementById('main-header');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) { header.classList.add('scrolled'); } else { header.classList.remove('scrolled'); }
+        });
+
+        document.getElementById("year").textContent = new Date().getFullYear();
+
+        /* --- Scroll Reveal Logic --- */
+        const observerOptions = { threshold: 0.1 };
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach((entry, index) => {
+                if (entry.isIntersecting) { setTimeout(() => { entry.target.classList.add('active'); }, index * 50); }
+            });
+        }, observerOptions);
+        document.querySelectorAll('.reveal').forEach((el) => { observer.observe(el); });
+
+        /* --- Accordion Logic --- */
+        var acc = document.getElementsByClassName("accordion");
+        for (var i = 0; i < acc.length; i++) {
+            acc[i].addEventListener("click", function() {
+                this.classList.toggle("active");
+                var panel = this.nextElementSibling;
+                if (panel.style.maxHeight) {
+                    panel.style.maxHeight = null;
+                } else {
+                    panel.style.maxHeight = panel.scrollHeight + "px";
+                } 
+            });
+        }
+    </script>
+</body>
+</html>
